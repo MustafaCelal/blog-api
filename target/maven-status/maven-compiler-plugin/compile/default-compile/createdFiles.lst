@@ -1,5 +1,6 @@
 com/raptiye/blog/exception/ErrorResponse$ErrorResponseBuilder.class
 com/raptiye/blog/domain/Tag.class
+com/raptiye/blog/config/DataInitializer.class
 com/raptiye/blog/mapper/CommentMapper.class
 com/raptiye/blog/mapper/PostMapper.class
 com/raptiye/blog/service/PostService.class

@@ -1,4 +1,5 @@
 /Users/mcguler/raptiye/blog-api/src/main/java/com/raptiye/blog/BlogApplication.java
+/Users/mcguler/raptiye/blog-api/src/main/java/com/raptiye/blog/config/DataInitializer.java
 /Users/mcguler/raptiye/blog-api/src/main/java/com/raptiye/blog/controller/CommentController.java
 /Users/mcguler/raptiye/blog-api/src/main/java/com/raptiye/blog/controller/PostController.java
 /Users/mcguler/raptiye/blog-api/src/main/java/com/raptiye/blog/controller/TagController.java
