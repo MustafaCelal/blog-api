@@ -3,7 +3,7 @@ package com.raptiye.blog.controller;
 import com.raptiye.blog.dto.request.CreateTagRequest;
 import com.raptiye.blog.dto.response.TagResponse;
 import com.raptiye.blog.service.TagService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

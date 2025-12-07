@@ -3,7 +3,7 @@ package com.raptiye.blog.controller;
 import com.raptiye.blog.dto.request.CreateCommentRequest;
 import com.raptiye.blog.dto.response.CommentResponse;
 import com.raptiye.blog.service.CommentService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

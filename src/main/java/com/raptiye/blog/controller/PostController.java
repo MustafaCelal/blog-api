@@ -5,7 +5,7 @@ import com.raptiye.blog.dto.request.UpdatePostRequest;
 import com.raptiye.blog.dto.response.PostDetailResponse;
 import com.raptiye.blog.dto.response.PostResponse;
 import com.raptiye.blog.service.PostService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

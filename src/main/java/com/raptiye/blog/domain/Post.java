@@ -1,6 +1,6 @@
 package com.raptiye.blog.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
