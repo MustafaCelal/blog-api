@@ -19,6 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * DataInitializer is disabled by default since we use Flyway for database
+ * initialization.
+ * This can be enabled for development/testing by activating the 'dev' profile.
+ * In production, Flyway migration scripts handle all database setup.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -35,11 +41,9 @@ public class DataInitializer implements CommandLineRunner {
         public void run(String... args) {
                 log.info("Checking database initialization status...");
 
-                // Always create default users if they don't exist
-                if (userRepository.count() == 0) {
-                        log.info("Creating default users...");
-
-                        // Create admin user
+                // Create admin user if not exists
+                if (!userRepository.existsByUsername("admin")) {
+                        log.info("Creating default admin user...");
                         User admin = User.builder()
                                         .username("admin")
                                         .email("admin@blog.com")
@@ -47,8 +51,11 @@ public class DataInitializer implements CommandLineRunner {
                                         .role(Role.ADMIN)
                                         .build();
                         userRepository.save(admin);
+                }
 
-                        // Create a regular user
+                // Create regular user if not exists
+                if (!userRepository.existsByUsername("user")) {
+                        log.info("Creating default regular user...");
                         User user = User.builder()
                                         .username("user")
                                         .email("user@blog.com")
@@ -56,15 +63,14 @@ public class DataInitializer implements CommandLineRunner {
                                         .role(Role.USER)
                                         .build();
                         userRepository.save(user);
-
-                        log.info("Created {} users", userRepository.count());
-                } else {
-                        log.info("Users already exist. Skipping user creation.");
                 }
+
+                log.info("User initialization check completed. Total users: {}", userRepository.count());
 
                 // Check if blog data already exists to prevent duplicate initialization
                 if (postRepository.count() > 0) {
                         log.info("Blog data already exists. Skipping blog data initialization.");
+                        log.info("Application is ready! Access it at: http://localhost:8080/api/posts");
                         return;
                 }
 
@@ -227,6 +233,7 @@ public class DataInitializer implements CommandLineRunner {
                 log.info("Database initialization completed successfully!");
                 log.info("Summary: {} posts, {} tags, {} comments",
                                 postRepository.count(), tagRepository.count(), commentRepository.count());
+                log.info("Application is ready! Access it at: http://localhost:8080/api/posts");
         }
 
         private Tag createTag(String name, String slug) {

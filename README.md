@@ -7,6 +7,7 @@ Java Spring Boot ile geliştirilmiş temiz, sürdürülebilir ve ölçeklenebili
 - **Java 21** + **Spring Boot 3.3.6**
 - **Spring Data JPA** + **PostgreSQL**
 - **Spring Security** + **JWT Authentication**
+- **Flyway** - Database Migration & Versioning
 - **Lombok** + **Hibernate Validator**
 
 ## Proje Yapısı
@@ -33,6 +34,12 @@ POST: id, title, slug, summary, content, published, created_at, updated_at
 COMMENT: id, author_name, author_email, content, approved, post_id, created_at
 TAG: id, name, slug, created_at
 ```
+
+## API Documentation (Swagger UI)
+
+API dokümantasyonuna ve test arayüzüne aşağıdaki adresten erişebilirsiniz:
+- **Swagger UI**: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+- **OpenAPI JSON**: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
 
 ## API Endpoints
 
@@ -93,7 +100,7 @@ TAG: id, name, slug, created_at
 
 4. **Uygulamayı çalıştır**:
    ```bash
-   ./mvnw spring-boot:run
+   mvn spring-boot:run
    ```
 
 5. **Default Kullanıcılar**:
