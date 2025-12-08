@@ -4,8 +4,9 @@ Java Spring Boot ile geliştirilmiş temiz, sürdürülebilir ve ölçeklenebili
 
 ## Teknolojiler
 
-- **Java 8** + **Spring Boot 2.7.18**
+- **Java 21** + **Spring Boot 3.3.6**
 - **Spring Data JPA** + **PostgreSQL**
+- **Spring Security** + **JWT Authentication**
 - **Lombok** + **Hibernate Validator**
 
 ## Proje Yapısı
@@ -35,35 +36,41 @@ TAG: id, name, slug, created_at
 
 ## API Endpoints
 
+### Authentication
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/auth/register` | Kullanıcı kaydı | No |
+| POST | `/api/auth/login` | Kullanıcı girişi | No |
+
 ### Posts
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/posts` | Tüm postları listele |
-| GET | `/api/posts/{slug}` | Slug ile post detayı |
-| GET | `/api/posts/id/{id}` | ID ile post detayı |
-| GET | `/api/posts/tag/{tagSlug}` | Tag'e göre postlar |
-| POST | `/api/posts` | Yeni post oluştur |
-| PUT | `/api/posts/{id}` | Post güncelle |
-| DELETE | `/api/posts/{id}` | Post sil |
-| POST | `/api/posts/{postId}/tags/{tagId}` | Tag ekle |
-| DELETE | `/api/posts/{postId}/tags/{tagId}` | Tag çıkar |
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/posts` | Tüm postları listele | No |
+| GET | `/api/posts/{slug}` | Slug ile post detayı | No |
+| GET | `/api/posts/id/{id}` | ID ile post detayı | No |
+| GET | `/api/posts/tag/{tagSlug}` | Tag'e göre postlar | No |
+| POST | `/api/posts` | Yeni post oluştur | ✅ ADMIN |
+| PUT | `/api/posts/{id}` | Post güncelle | ✅ ADMIN |
+| DELETE | `/api/posts/{id}` | Post sil | ✅ ADMIN |
+| POST | `/api/posts/{postId}/tags/{tagId}` | Tag ekle | ✅ ADMIN |
+| DELETE | `/api/posts/{postId}/tags/{tagId}` | Tag çıkar | ✅ ADMIN |
 
 ### Comments
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/posts/{postId}/comments` | Yorumları listele |
-| POST | `/api/posts/{postId}/comments` | Yorum ekle |
-| GET | `/api/comments/pending` | Onay bekleyen yorumlar |
-| PUT | `/api/comments/{id}/approve` | Yorumu onayla |
-| DELETE | `/api/comments/{id}` | Yorum sil |
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/posts/{postId}/comments` | Yorumları listele | No |
+| POST | `/api/posts/{postId}/comments` | Yorum ekle | No |
+| GET | `/api/comments/pending` | Onay bekleyen yorumlar | ✅ ADMIN |
+| PUT | `/api/comments/{id}/approve` | Yorumu onayla | ✅ ADMIN |
+| DELETE | `/api/comments/{id}` | Yorum sil | ✅ ADMIN |
 
 ### Tags
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/tags` | Tüm tag'leri listele |
-| GET | `/api/tags/{slug}` | Tag detayı |
-| POST | `/api/tags` | Yeni tag oluştur |
-| DELETE | `/api/tags/{id}` | Tag sil |
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/tags` | Tüm tag'leri listele | No |
+| GET | `/api/tags/{slug}` | Tag detayı | No |
+| POST | `/api/tags` | Yeni tag oluştur | ✅ ADMIN |
+| DELETE | `/api/tags/{id}` | Tag sil | ✅ ADMIN |
 
 ## Kurulum
 
@@ -76,17 +83,68 @@ TAG: id, name, slug, created_at
    ```bash
    export DB_USERNAME=postgres
    export DB_PASSWORD=postgres
+   export JWT_SECRET=your-secret-key-here
    ```
 
-3. **Uygulamayı çalıştır**:
+3. **Java 21 kullanılıyor olduğundan emin ol**:
+   ```bash
+   export JAVA_HOME=/path/to/java-21
+   ```
+
+4. **Uygulamayı çalıştır**:
    ```bash
    ./mvnw spring-boot:run
    ```
 
+5. **Default Kullanıcılar**:
+   - Admin: `username: admin`, `password: admin123`
+   - User: `username: user`, `password: user123`
+
 ## API Kullanım Örnekleri
 
+### Authentication
+
 ```bash
-# Tag oluştur
+# Kullanıcı kaydı
+curl -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "johndoe",
+    "email": "john@example.com",
+    "password": "password123"
+  }'
+
+# Kullanıcı girişi
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "admin",
+    "password": "admin123"
+  }'
+
+# Response:
+# {
+#   "token": "eyJhbGciOiJIUzI1NiJ9...",
+#   "type": "Bearer",
+#   "username": "admin",
+#   "email": "admin@blog.com",
+#   "role": "ADMIN"
+# }
+```
+
+### Authenticated Requests
+
+```bash
+# JWT token'ı değişkene kaydet
+TOKEN="your-jwt-token-here"
+
+# Tag oluştur (ADMIN gerekli)
+curl -X POST http://localhost:8080/api/tags \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"name": "Java"}'
+
+# Post oluştur (ADMIN gerekli)
 curl -X POST http://localhost:8080/api/tags \
   -H "Content-Type: application/json" \
   -d '{"name": "Java"}'
