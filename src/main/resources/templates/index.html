@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h1><a th:href="@{/}">My Blog</a></h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="posts-list">
+            <article th:each="post : ${posts}" class="post-summary">
+                <h2>
+                    <a th:href="@{'/post/' + ${post.slug}}" th:text="${post.title}">Post Title</a>
+                </h2>
+                <div class="meta">
+                    <span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>
+                </div>
+                <p th:text="${post.summary}">Summary of the post...</p>
+                <div class="tags">
+                    <span th:each="tag : ${post.tags}" class="tag" th:text="${tag.name}">Tag</span>
+                </div>
+            </article>
+        </div>
+
+        <div th:if="${posts.empty}" class="no-posts">
+            <p>No posts found.</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 My Blog API & UI</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

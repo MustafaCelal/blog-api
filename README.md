@@ -1,12 +1,13 @@
-# Blog API
+# Blog API & UI (Hybrid)
 
-Java Spring Boot ile geliştirilmiş temiz, sürdürülebilir ve ölçeklenebilir bir blog REST API'si.
+Java Spring Boot ile geliştirilmiş, hem REST API sunan hem de Thymeleaf ile Server-Side Rendering (SSR) yaparak HTML arayüz sağlayan temiz ve genişletilebilir bir blog uygulaması.
 
 ## Teknolojiler
 
 - **Java 21** + **Spring Boot 3.3.6**
 - **Spring Data JPA** + **PostgreSQL**
 - **Spring Security** + **JWT Authentication**
+- **Thymeleaf** - HTML Template Engine
 - **Flyway** - Database Migration & Versioning
 - **Lombok** + **Hibernate Validator**
 
@@ -18,7 +19,7 @@ src/main/java/com/raptiye/blog/
 ├── domain/                        # Entity'ler (Post, Comment, Tag)
 ├── repository/                    # Data Access Layer
 ├── service/                       # Business Logic
-├── controller/                    # REST API
+├── controller/                    # REST API & Web Controllers
 ├── dto/                           # Request/Response DTOs
 ├── mapper/                        # Entity ↔ DTO
 └── exception/                     # Error Handling
@@ -34,6 +35,12 @@ POST: id, title, slug, summary, content, published, created_at, updated_at
 COMMENT: id, author_name, author_email, content, approved, post_id, created_at
 TAG: id, name, slug, created_at
 ```
+
+## Web UI (HTML Arayüz)
+
+Uygulama, JSON API'nin yanı sıra son kullanıcılar için basit bir web arayüzü de sunar.
+- **Ana Sayfa**: [http://localhost:8080/](http://localhost:8080/) - Blog yazılarını listeler
+- **Post Detay**: [http://localhost:8080/post/{slug}](http://localhost:8080/post/slug) - Yazı detayını ve yorumları gösterir
 
 ## API Documentation (Swagger UI)
 
@@ -152,14 +159,10 @@ curl -X POST http://localhost:8080/api/tags \
   -d '{"name": "Java"}'
 
 # Post oluştur (ADMIN gerekli)
-curl -X POST http://localhost:8080/api/tags \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Java"}'
-
-# Post oluştur
 curl -X POST http://localhost:8080/api/posts \
   -H "Content-Type: application/json" \
-  -d '{"title": "İlk Post", "summary": "Özet", "content": "İçerik"}'
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"title": "İlk Post", "summary": "Özet", "content": "İçerik", "published": true}'
 
 # Postları listele
 curl http://localhost:8080/api/posts

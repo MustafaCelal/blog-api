@@ -42,6 +42,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/posts/*/comments").permitAll()
 
+                        // UI Public endpoints
+                        .requestMatchers("/", "/post/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+
                         // Admin only endpoints
                         .requestMatchers(HttpMethod.POST, "/api/posts").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/posts/**").hasRole("ADMIN")
