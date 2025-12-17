@@ -24,4 +24,9 @@ public class WebController {
         model.addAttribute("post", postService.getPostBySlug(slug, true));
         return "post-detail";
     }
+
+    @GetMapping("/design-test")
+    public String designTest() {
+        return "bootstrap_blog";
+    }
 }

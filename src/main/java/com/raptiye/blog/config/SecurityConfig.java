@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/posts/*/comments").permitAll()
 
                         // UI Public endpoints
-                        .requestMatchers("/", "/post/**").permitAll()
+                        .requestMatchers("/", "/post/**", "/design-test").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
 
                         // Admin only endpoints
