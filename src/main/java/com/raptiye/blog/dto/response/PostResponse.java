@@ -24,4 +24,11 @@ public class PostResponse {
     private int commentCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public PostResponse(Long id, String title, String content, LocalDateTime createdAt) {
+        this.id = id;
+        this.title = title;
+        this.content = content; // Kısaltılmış metin buraya gelir
+        this.createdAt = createdAt;
+    }
 }

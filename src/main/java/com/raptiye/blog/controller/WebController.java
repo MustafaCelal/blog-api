@@ -26,7 +26,8 @@ public class WebController {
     }
 
     @GetMapping("/design-test")
-    public String designTest() {
+    public String designTest(Model model) {
+        model.addAttribute("posts", postService.getPublishedPostSnippets());
         return "bootstrap_blog";
     }
 }

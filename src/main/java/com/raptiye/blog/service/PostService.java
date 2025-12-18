@@ -38,6 +38,11 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    public List<PostResponse> getPublishedPostSnippets() {
+        int snippetLength = 350;
+        return postRepository.findPublishedPostResponsesWithSnippet(snippetLength);
+    }
+
     public PostDetailResponse getPostBySlug(String slug, boolean includeUnapprovedComments) {
         Post post = postRepository.findBySlug(slug)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "slug", slug));
