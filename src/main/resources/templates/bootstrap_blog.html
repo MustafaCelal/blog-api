@@ -4,31 +4,19 @@
 <head th:replace="~{fragments/head :: head}"></head>
 
 <body>
-
     <div th:replace="~{fragments/header :: header}"></div>
-
     <main class="container">
-
         <!-- <div th:replace="~{fragments/content :: main-featured}"></div> -->
         <!-- <div th:replace="~{fragments/content :: featured-cards}"></div> -->
-
-        <div class="row g-5">
-
-            <div th:replace="~{fragments/content :: blog-posts}"></div>
-
-            <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div th:replace="~{fragments/content :: blog-posts}"></div>
+            </div>
+            <!-- <div th:replace="~{fragments/sidebar :: sidebar}"></div> -->
         </div>
-
     </main>
-
-
-
     <footer th:replace="~{fragments/footer :: footer}"></footer>
     <div th:replace="~{fragments/scripts :: scripts}"></div>
-
-
-
-
 </body>
 
 </html>
