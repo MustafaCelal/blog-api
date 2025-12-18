@@ -26,7 +26,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     boolean existsBySlug(String slug);
 
     @Query("SELECT new com.raptiye.blog.dto.response.PostResponse(" +
-            "p.id, p.title, " +
+            "p.id, p.title, p.slug, p.summary, " +
             "SUBSTRING(p.content, 1, :snippetLength), " +
             "p.createdAt) " +
             "FROM Post p " +

@@ -25,9 +25,11 @@ public class PostResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public PostResponse(Long id, String title, String content, LocalDateTime createdAt) {
+    public PostResponse(Long id, String title, String slug, String summary, String content, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
+        this.slug = slug;
+        this.summary = summary;
         this.content = content; // Kısaltılmış metin buraya gelir
         this.createdAt = createdAt;
     }

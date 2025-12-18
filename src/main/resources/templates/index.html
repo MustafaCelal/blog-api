@@ -25,7 +25,7 @@
                 <div class="meta">
                     <span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>
                 </div>
-                <p th:text="${post.summary}">Summary of the post...</p>
+                <div th:utext="${@markdownService.translateToHtml(post.summary)}">Summary of the post...</div>
                 <div class="tags">
                     <span th:each="tag : ${post.tags}" class="tag" th:text="${tag.name}">Tag</span>
                 </div>

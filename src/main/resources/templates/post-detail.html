@@ -23,7 +23,7 @@
                 <span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>
             </div>
 
-            <div class="content" th:utext="${post.content}">
+            <div class="content" th:utext="${@markdownService.translateToHtml(post.content)}">
                 Post Content goes here...
             </div>
 

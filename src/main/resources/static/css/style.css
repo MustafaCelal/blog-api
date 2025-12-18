@@ -141,6 +141,92 @@
      font-size: 0.875rem;
  }
 
+ /* Markdown Styles */
+ .content h1,
+ .content h2,
+ .content h3,
+ .content h4,
+ .content h5,
+ .content h6 {
+     margin-top: 2rem;
+     margin-bottom: 1rem;
+     color: #1a202c;
+     font-weight: 700;
+ }
+
+ .content p {
+     margin-bottom: 1.25rem;
+ }
+
+ .content ul,
+ .content ol {
+     margin-bottom: 1.25rem;
+     padding-left: 1.5rem;
+ }
+
+ .content li {
+     margin-bottom: 0.5rem;
+ }
+
+ /* Code Block Styles */
+ .content pre {
+     background: #1a202c;
+     color: #e2e8f0;
+     padding: 1.25rem;
+     border-radius: 12px;
+     overflow-x: auto;
+     margin: 1.5rem 0;
+     font-size: 0.9rem;
+     line-height: 1.5;
+     border: 1px solid rgba(255, 255, 255, 0.1);
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+ }
+
+ .content code {
+     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+     background: rgba(102, 126, 234, 0.1);
+     color: #5a67d8;
+     padding: 0.2rem 0.4rem;
+     border-radius: 6px;
+     font-size: 0.9em;
+ }
+
+ .content pre code {
+     background: transparent;
+     color: inherit;
+     padding: 0;
+     border-radius: 0;
+     font-size: inherit;
+ }
+
+ .content blockquote {
+     border-left: 4px solid #667eea;
+     padding: 1rem 1.5rem;
+     margin: 1.5rem 0;
+     background: #f8fafc;
+     color: #4a5568;
+     font-style: italic;
+     border-radius: 0 8px 8px 0;
+ }
+
+ .content table {
+     width: 100%;
+     border-collapse: collapse;
+     margin-bottom: 1.5rem;
+ }
+
+ .content th,
+ .content td {
+     border: 1px solid #e2e8f0;
+     padding: 0.75rem;
+     text-align: left;
+ }
+
+ .content th {
+     background: #f7fafc;
+     font-weight: 600;
+ }
+
  @media (max-width: 640px) {
      header {
          padding: 1.5rem 0 1rem;
