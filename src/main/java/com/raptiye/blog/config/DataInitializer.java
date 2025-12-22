@@ -11,7 +11,9 @@ import com.raptiye.blog.repository.TagRepository;
 import com.raptiye.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +22,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * DataInitializer is disabled by default since we use Flyway for database
- * initialization.
- * This can be enabled for development/testing by activating the 'dev' profile.
+ * DataInitializer only runs in 'dev' profile for development/testing.
  * In production, Flyway migration scripts handle all database setup.
+ * 
+ * Required environment variables for dev profile:
+ * - APP_ADMIN_PASSWORD: Password for admin user
+ * - APP_USER_PASSWORD: Password for regular user (optional, defaults to admin
+ * password)
  */
 @Component
+@Profile("dev")
 @RequiredArgsConstructor
 @Slf4j
 public class DataInitializer implements CommandLineRunner {
@@ -36,10 +42,22 @@ public class DataInitializer implements CommandLineRunner {
         private final UserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
 
+        @Value("${app.admin.password:#{null}}")
+        private String adminPassword;
+
+        @Value("${app.user.password:#{null}}")
+        private String userPassword;
+
         @Override
         @Transactional
         public void run(String... args) {
-                log.info("Checking database initialization status...");
+                log.info("DataInitializer running in dev profile...");
+
+                if (adminPassword == null || adminPassword.isBlank()) {
+                        log.warn("APP_ADMIN_PASSWORD not set. Skipping user initialization.");
+                        log.warn("Set APP_ADMIN_PASSWORD environment variable to create default users.");
+                        return;
+                }
 
                 // Create admin user if not exists
                 if (!userRepository.existsByUsername("admin")) {
@@ -47,19 +65,20 @@ public class DataInitializer implements CommandLineRunner {
                         User admin = User.builder()
                                         .username("admin")
                                         .email("admin@blog.com")
-                                        .password(passwordEncoder.encode("admin123"))
+                                        .password(passwordEncoder.encode(adminPassword))
                                         .role(Role.ADMIN)
                                         .build();
                         userRepository.save(admin);
                 }
 
                 // Create regular user if not exists
+                String regularUserPassword = userPassword != null ? userPassword : adminPassword;
                 if (!userRepository.existsByUsername("user")) {
                         log.info("Creating default regular user...");
                         User user = User.builder()
                                         .username("user")
                                         .email("user@blog.com")
-                                        .password(passwordEncoder.encode("user123"))
+                                        .password(passwordEncoder.encode(regularUserPassword))
                                         .role(Role.USER)
                                         .build();
                         userRepository.save(user);

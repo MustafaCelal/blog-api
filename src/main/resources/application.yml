@@ -3,16 +3,16 @@ spring:
     name: blog-api
   
   datasource:
-    url: jdbc:postgresql://107.172.56.254:5432/blog_db_test
-    username: ${DB_USERNAME:postgre1}
-    password: ${DB_PASSWORD:p@ssword}
+    url: ${DB_URL}  # Required - e.g., jdbc:postgresql://localhost:5432/blog_db
+    username: ${DB_USERNAME}  # Required
+    password: ${DB_PASSWORD}  # Required
     driver-class-name: org.postgresql.Driver
   
   jpa:
     hibernate:
       ddl-auto: validate  # Changed from 'update' to 'validate' for production safety
     open-in-view: false   # Disable Open Session In View pattern
-    show-sql: true
+    show-sql: ${SHOW_SQL:false}
     defer-datasource-initialization: false  # Flyway handles schema initialization
     properties:
       hibernate:
@@ -28,22 +28,27 @@ spring:
     validate-on-migrate: true
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 logging:
   level:
-    com.raptiye.blog: DEBUG
-    org.hibernate.SQL: DEBUG
+    com.raptiye.blog: ${LOG_LEVEL:INFO}
+    org.hibernate.SQL: ${LOG_LEVEL_SQL:WARN}
 
 # JWT Configuration
 jwt:
-  secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-  expiration: 86400000 # 24 hours in milliseconds
+  secret: ${JWT_SECRET}  # Required - minimum 256 bits (32 characters) Base64 encoded
+  expiration: ${JWT_EXPIRATION:86400000}  # 24 hours in milliseconds
+
+# Application Settings
+app:
+  admin:
+    password: ${APP_ADMIN_PASSWORD:#{null}}  # Required for dev profile
 
 web:
   thymeleaf:
-    cache: false
+    cache: ${THYMELEAF_CACHE:true}
   resources:
     cache:
       cachecontrol:
-        max-age: 0
+        max-age: ${STATIC_CACHE_MAX_AGE:3600}
