@@ -19,7 +19,7 @@ public class Comment extends BaseEntity {
     @Column(name = "author_name", nullable = false)
     private String authorName;
 
-    @Column(name = "author_email")
+    @Column(name = "author_email", nullable = false)
     private String authorEmail;
 
     @Column(columnDefinition = "TEXT", nullable = false)
