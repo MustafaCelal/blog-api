@@ -3,9 +3,9 @@ spring:
     name: blog-api
   
   datasource:
-    url: ${DB_URL}  # Required - e.g., jdbc:postgresql://localhost:5432/blog_db
-    username: ${DB_USERNAME}  # Required
-    password: ${DB_PASSWORD}  # Required
+    url: ${DB_URL:jdbc:postgresql://107.172.56.254:5432/blog_db_test}  # Required - e.g., jdbc:postgresql://localhost:5432/blog_db
+    username: ${DB_USERNAME:postgre1}  # Required
+    password: ${DB_PASSWORD:p@ssword}  # Required
     driver-class-name: org.postgresql.Driver
   
   jpa:
@@ -37,7 +37,7 @@ logging:
 
 # JWT Configuration
 jwt:
-  secret: ${JWT_SECRET}  # Required - minimum 256 bits (32 characters) Base64 encoded
+  secret: ${JWT_SECRET:NDIzdTg5NzIzOTg0NzIzODk0NzIzODk3NDg5MjczNDg5NzIzODk0NzIzODk3NDg5MjM3NDg5MjM=}  # Required - minimum 256 bits (32 characters) Base64 encoded
   expiration: ${JWT_EXPIRATION:86400000}  # 24 hours in milliseconds
 
 # Application Settings

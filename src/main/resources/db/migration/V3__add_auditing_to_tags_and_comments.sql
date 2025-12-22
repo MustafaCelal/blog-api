@@ -1,0 +1,2 @@
+ALTER TABLE tags ADD COLUMN updated_at TIMESTAMP(6);
+ALTER TABLE comments ADD COLUMN updated_at TIMESTAMP(6);
