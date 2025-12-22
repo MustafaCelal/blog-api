@@ -82,6 +82,21 @@ class AuthServiceTest {
     }
 
     @Test
+    void shouldThrowExceptionWhenRegisteringExistingEmail() {
+        // Arrange
+        RegisterRequest request = new RegisterRequest();
+        request.setUsername("newUser");
+        request.setEmail("existing@example.com");
+
+        when(userRepository.existsByUsername(request.getUsername())).thenReturn(false);
+        when(userRepository.existsByEmail(request.getEmail())).thenReturn(true);
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> authService.register(request));
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
     void shouldLoginUser() {
         // Arrange
         LoginRequest request = new LoginRequest();
@@ -113,6 +128,19 @@ class AuthServiceTest {
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new IllegalArgumentException("Invalid credentials"));
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> authService.login(request));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserNotFoundDuringLogin() {
+        // Arrange
+        LoginRequest request = new LoginRequest();
+        request.setUsername("nonexistent");
+        request.setPassword("password");
+
+        when(userRepository.findByUsername(request.getUsername())).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> authService.login(request));
