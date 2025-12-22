@@ -109,6 +109,28 @@ class PostServiceTest {
     }
 
     @Test
+    void shouldCreatePostWithEmptyTags() {
+        // Arrange
+        CreatePostRequest request = new CreatePostRequest();
+        request.setTitle("Empty Tags Post");
+        request.setTagIds(Collections.emptySet());
+
+        Post savedPost = Post.builder().id(1L).title("Empty Tags Post").build();
+        PostResponse response = new PostResponse();
+        response.setId(1L);
+
+        when(postRepository.save(any(Post.class))).thenReturn(savedPost);
+        when(postMapper.toResponse(savedPost)).thenReturn(response);
+
+        // Act
+        PostResponse result = postService.createPost(request);
+
+        // Assert
+        assertThat(result).isNotNull();
+        verify(postRepository).save(any(Post.class));
+    }
+
+    @Test
     void shouldGetPublishedPosts() {
         // Arrange
         Post post = new Post();
@@ -286,5 +308,142 @@ class PostServiceTest {
 
         // Assert
         assertThat(results).hasSize(1);
+    }
+
+    @Test
+    void shouldGetAllPosts() {
+        // Arrange
+        Post post = new Post();
+        post.setId(1L);
+        PostResponse response = new PostResponse();
+        response.setId(1L);
+
+        when(postRepository.findAllByOrderByCreatedAtDesc()).thenReturn(List.of(post));
+        when(postMapper.toResponse(post)).thenReturn(response);
+
+        // Act
+        List<PostResponse> results = postService.getAllPosts();
+
+        // Assert
+        assertThat(results).hasSize(1);
+        verify(postRepository).findAllByOrderByCreatedAtDesc();
+    }
+
+    @Test
+    void shouldGetPostsByTagSlug() {
+        // Arrange
+        String tagSlug = "java";
+        Post post = new Post();
+        post.setId(1L);
+        PostResponse response = new PostResponse();
+        response.setId(1L);
+
+        when(postRepository.findByTagSlug(tagSlug)).thenReturn(List.of(post));
+        when(postMapper.toResponse(post)).thenReturn(response);
+
+        // Act
+        List<PostResponse> results = postService.getPostsByTagSlug(tagSlug);
+
+        // Assert
+        assertThat(results).hasSize(1);
+        verify(postRepository).findByTagSlug(tagSlug);
+    }
+
+    @Test
+    void shouldUpdateAllPostFields() {
+        // Arrange
+        Long id = 1L;
+        UpdatePostRequest request = new UpdatePostRequest();
+        request.setTitle("New Title");
+        request.setSummary("New Summary");
+        request.setContent("New Content");
+        request.setPublished(true);
+
+        Post existingPost = Post.builder().id(id).title("Old").summary("Old").content("Old").published(false).build();
+        Post updatedPost = Post.builder().id(id).title("New Title").summary("New Summary").content("New Content")
+                .published(true).build();
+        PostResponse response = new PostResponse();
+        response.setTitle("New Title");
+
+        when(postRepository.findById(id)).thenReturn(Optional.of(existingPost));
+        when(postRepository.save(any(Post.class))).thenReturn(updatedPost);
+        when(postMapper.toResponse(updatedPost)).thenReturn(response);
+
+        // Act
+        PostResponse result = postService.updatePost(id, request);
+
+        // Assert
+        assertThat(result.getTitle()).isEqualTo("New Title");
+        verify(postRepository).save(existingPost);
+        assertThat(existingPost.getTitle()).isEqualTo("New Title");
+        assertThat(existingPost.getSummary()).isEqualTo("New Summary");
+        assertThat(existingPost.getContent()).isEqualTo("New Content");
+        assertThat(existingPost.isPublished()).isTrue();
+    }
+
+    @Test
+    void shouldUpdateOnlySummaryField() {
+        // Arrange
+        Long id = 1L;
+        UpdatePostRequest request = new UpdatePostRequest();
+        request.setSummary("Only Summary Updated");
+
+        Post existingPost = Post.builder().id(id).title("Original Title").summary("Old Summary").build();
+        Post updatedPost = Post.builder().id(id).title("Original Title").summary("Only Summary Updated").build();
+        PostResponse response = new PostResponse();
+        response.setTitle("Original Title");
+        response.setSummary("Only Summary Updated");
+
+        when(postRepository.findById(id)).thenReturn(Optional.of(existingPost));
+        when(postRepository.save(any(Post.class))).thenReturn(updatedPost);
+        when(postMapper.toResponse(updatedPost)).thenReturn(response);
+
+        // Act
+        PostResponse result = postService.updatePost(id, request);
+
+        // Assert
+        assertThat(result.getSummary()).isEqualTo("Only Summary Updated");
+        assertThat(existingPost.getTitle()).isEqualTo("Original Title");
+        verify(postRepository).save(existingPost);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentPost() {
+        // Arrange
+        Long id = 99L;
+        when(postRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> postService.updatePost(id, new UpdatePostRequest()));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenAddingTagToNonExistentPost() {
+        // Arrange
+        Long postId = 99L;
+        when(postRepository.findById(postId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> postService.addTagToPost(postId, 1L));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenRemovingTagFromNonExistentPost() {
+        // Arrange
+        Long postId = 99L;
+        when(postRepository.findById(postId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> postService.removeTagFromPost(postId, 1L));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeletingNonExistentPost() {
+        // Arrange
+        Long id = 99L;
+        when(postRepository.existsById(id)).thenReturn(false);
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> postService.deletePost(id));
     }
 }
