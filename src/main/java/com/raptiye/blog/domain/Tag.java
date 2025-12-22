@@ -3,7 +3,6 @@ package com.raptiye.blog.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Tag {
+public class Tag extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,12 +29,8 @@ public class Tag {
     @Builder.Default
     private Set<Post> posts = new HashSet<>();
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
         if (this.slug == null || this.slug.isEmpty()) {
             this.slug = generateSlug(this.name);
         }
