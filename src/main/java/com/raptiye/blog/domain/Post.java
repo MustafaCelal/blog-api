@@ -60,7 +60,8 @@ public class Post extends BaseEntity {
                 .replaceAll("[^a-z0-9\\s-]", "")
                 .replaceAll("\\s+", "-")
                 .replaceAll("-+", "-")
-                .trim();
+                .trim()
+                .replaceAll("^-|-$", "");
     }
 
     // Helper methods for bidirectional relationship
