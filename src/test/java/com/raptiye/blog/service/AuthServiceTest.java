@@ -132,7 +132,7 @@ class AuthServiceTest {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> authService.login(request));
     }
-
+  
     @Test
     void shouldThrowExceptionWhenUserNotFoundDuringLogin() {
         // Arrange
