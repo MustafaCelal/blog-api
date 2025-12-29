@@ -8,12 +8,18 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+        format_sql: false
         
   flyway:
     enabled: false # Disable flyway for unit tests to keep it simple
+
+  h2:
+    console:
+      enabled: false
 
 jwt:
   secret: ND23u897239847238947238974892734
