@@ -1,7 +1,6 @@
 package com.raptiye.blog.service;
 
 import com.raptiye.blog.domain.Post;
-import com.raptiye.blog.domain.Tag;
 import com.raptiye.blog.dto.request.CreatePostRequest;
 import com.raptiye.blog.dto.request.UpdatePostRequest;
 import com.raptiye.blog.exception.ResourceNotFoundException;
