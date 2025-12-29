@@ -1,55 +1,65 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${post.title}">Post Title</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
+<head th:replace="~{fragments/head :: head}"></head>
 
 <body>
-
-    <header>
-        <div class="container">
-            <h1><a th:href="@{/}">My Blog</a></h1>
-        </div>
-    </header>
-
+    <div th:replace="~{fragments/header :: header}"></div>
     <main class="container">
-        <article class="post-detail">
-            <h1 th:text="${post.title}">Post Title</h1>
-            <div class="meta">
-                <span th:text="${#temporals.format(post.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Post Detail -->
+                <article class="blog-post">
+                    <h2 class="display-5 link-body-emphasis mb-2" th:text="${post.title}">Post Title</h2>
+
+                    <!-- Meta info -->
+                    <p class="blog-post-meta mb-4">
+                        <span th:text="${#temporals.format(post.createdAt, 'dd MMMM yyyy')}">January 1, 2025</span>
+                        <span class="meta-separator">·</span>
+                        <span class="reading-time">5 min read</span>
+                    </p>
+
+                    <!-- Tags -->
+                    <div class="mb-4" th:if="${post.tags != null and !post.tags.empty}">
+                        <span th:each="tag : ${post.tags}" class="tag-badge me-2" th:text="${tag.name}">Tag</span>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="post-content" th:utext="${@markdownService.translateToHtml(post.content)}">
+                        Post Content goes here...
+                    </div>
+                </article>
+
+                <!-- Comments Section -->
+                <section class="comments-section mt-5 pt-4 border-top"
+                    th:if="${post.comments != null and !post.comments.empty}">
+                    <h4 class="mb-4">
+                        <span th:text="${#lists.size(post.comments)}">0</span> Comments
+                    </h4>
+                    <div th:each="comment : ${post.comments}" class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="text-body-emphasis" th:text="${comment.authorName}">Author</strong>
+                                <small class="text-body-secondary"
+                                    th:text="${#temporals.format(comment.createdAt, 'dd MMM yyyy')}">Date</small>
+                            </div>
+                            <p class="card-text mb-0 text-body-secondary" th:text="${comment.content}">Comment content
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Back to Home -->
+                <div class="mt-4 mb-5">
+                    <a th:href="@{/}" class="btn btn-outline-secondary">
+                        &larr; Back to Home
+                    </a>
+                </div>
             </div>
-
-            <div class="content" th:utext="${@markdownService.translateToHtml(post.content)}">
-                Post Content goes here...
-            </div>
-
-            <div class="tags">
-                <span th:each="tag : ${post.tags}" class="tag" th:text="${tag.name}">Tag</span>
-            </div>
-        </article>
-
-        <section class="comments-section" th:if="${post.comments != null and !post.comments.empty}">
-            <h3>Comments</h3>
-            <div th:each="comment : ${post.comments}" class="comment">
-                <strong th:text="${comment.authorName}">Author</strong>
-                <span class="date" th:text="${#temporals.format(comment.createdAt, 'dd-MM-yyyy HH:mm')}">Date</span>
-                <p th:text="${comment.content}">Comment content</p>
-            </div>
-        </section>
-
-        <p><a th:href="@{/}">&larr; Back to Home</a></p>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 My Blog API & UI</p>
         </div>
-    </footer>
-
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
 </body>
 
 </html>

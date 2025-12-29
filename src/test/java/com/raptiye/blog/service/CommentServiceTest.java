@@ -173,4 +173,24 @@ class CommentServiceTest {
         // Assert
         assertThat(results).hasSize(1);
     }
+
+    @Test
+    void shouldThrowExceptionWhenApproveNonExistentComment() {
+        // Arrange
+        Long commentId = 99L;
+        when(commentRepository.findById(commentId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> commentService.approveComment(commentId));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeleteNonExistentComment() {
+        // Arrange
+        Long commentId = 99L;
+        when(commentRepository.existsById(commentId)).thenReturn(false);
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> commentService.deleteComment(commentId));
+    }
 }

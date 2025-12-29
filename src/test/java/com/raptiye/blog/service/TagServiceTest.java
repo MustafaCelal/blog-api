@@ -168,4 +168,29 @@ class TagServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> tagService.deleteTag(id));
         verify(tagRepository, never()).deleteById(anyLong());
     }
+
+    @Test
+    void shouldGetTagEntityById() {
+        // Arrange
+        Long id = 1L;
+        Tag tag = Tag.builder().id(id).name("Java").build();
+        when(tagRepository.findById(id)).thenReturn(Optional.of(tag));
+
+        // Act
+        Tag result = tagService.getTagEntityById(id);
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(id);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTagEntityNotFoundById() {
+        // Arrange
+        Long id = 1L;
+        when(tagRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> tagService.getTagEntityById(id));
+    }
 }

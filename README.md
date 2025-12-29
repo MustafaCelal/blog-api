@@ -36,6 +36,19 @@ COMMENT: id, author_name, author_email, content, approved, post_id, created_at
 TAG: id, name, slug, created_at
 ```
 
+## CSS Yapısı (Yarı-Modüler)
+
+Uygulamanın CSS dosyaları `src/main/resources/static/css/` altında bulunur ve bakımı kolaylaştırmak için yarı-modüler bir yapıda organize edilmiştir:
+
+- **`blog.css`**: Ana giriş noktası. `@import` kullanarak diğer modülleri birleştirir.
+- **`modules/base.css`**: **İskelet ve Temel Ayarlar**. 
+    - Bootstrap override'ları (renkler, butonlar).
+    - Genel tipografi (fontlar, başlık stilleri).
+    - Global elementler (scrollbar, temel layout sınıfları).
+- **`modules/main.css`**: **Görsel Tasarım ve Sayfa Detayları**.
+    - UI Bileşenleri (kartlar, etiketler, ikonlar).
+    - Sayfa özel stilleri (Ana sayfa listeleme düzeni, yazı detay sayfası içerik formatlaması).
+
 ## Web UI (HTML Arayüz)
 
 Uygulama, JSON API'nin yanı sıra son kullanıcılar için basit bir web arayüzü de sunar.
